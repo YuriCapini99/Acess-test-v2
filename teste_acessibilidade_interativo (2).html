@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Acessibilidade Interativo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2 { color: #2c3e50; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input, textarea, select { width: 100%; padding: 5px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; margin-right: 10px; }
+    .categoria { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Roteiro de Teste de Acessibilidade Interativo</h1>
+
+  <h2>📋 Informações da Tela</h2>
+  <label>Nome da Tela:</label><input type="text" id="nomeTela">
+  <label>Versão Testada:</label><input type="text" id="versaoTestada">
+  <label>Data do Teste:</label><input type="date" id="dataTeste">
+  <label>Prioridade:</label>
+  <select id="prioridade">
+    <option>Alta</option>
+    <option>Média</option>
+    <option>Baixa</option>
+  </select>
+  <label>Responsável pelo Teste:</label><input type="text" id="responsavelTeste">
+  <label>Responsável pela Correção:</label><input type="text" id="responsavelCorrecao">
+  <label>Status de Correção:</label>
+  <select id="statusCorrecao">
+    <option>Pendente</option>
+    <option>Em andamento</option>
+    <option>Concluído</option>
+  </select>
+
+  <div class="categoria">
+    <h3>🗣️ Leitor de Tela <span title="Verifique se todos os elementos são lidos corretamente pelo leitor de tela.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="leitorResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="leitorObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🎨 Contraste <span title="Verifique se o contraste entre texto e fundo atende aos padrões de acessibilidade.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="contrasteResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="contrasteObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🔍 Ampliação <span title="Verifique se a interface permanece funcional com zoom de até 200%.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="ampliacaoResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="ampliacaoObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>⌨️ Navegação por Teclado <span title="Verifique se é possível navegar pela interface usando apenas o teclado.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="tecladoResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="tecladoObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🌈 Uso de Cores <span title="Verifique se as cores não são o único meio de transmitir informações.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="coresResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="coresObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>📱 Responsividade <span title="Verifique se a interface se adapta corretamente a diferentes tamanhos de tela.">ℹ️</span></h3>
+    <label>Resultado:</label>
+    <select id="responsivoResultado">
+      <option>Selecione uma opção</option>
+      <option>Positivo</option>
+      <option>Negativo</option>
+    </select>
+    <label>Observações:</label><textarea id="responsivoObs"></textarea>
+  </div>
+
+  <label>Observações Gerais:</label><textarea id="observacoesGerais"></textarea>
+
+  <button onclick="adicionarTela()">Adicionar Tela ao Relatório</button>
+  <button onclick="gerarPDF()">Gerar Relatório em PDF</button>
+
+  <script>
+    let telas = [];
+
+    function adicionarTela() {
+      const tela = {
+        nome: document.getElementById('nomeTela').value,
+        versao: document.getElementById('versaoTestada').value,
+        data: document.getElementById('dataTeste').value,
+        prioridade: document.getElementById('prioridade').value,
+        responsavelTeste: document.getElementById('responsavelTeste').value,
+        responsavelCorrecao: document.getElementById('responsavelCorrecao').value,
+        statusCorrecao: document.getElementById('statusCorrecao').value,
+        leitor: { resultado: document.getElementById('leitorResultado').value, obs: document.getElementById('leitorObs').value },
+        contraste: { resultado: document.getElementById('contrasteResultado').value, obs: document.getElementById('contrasteObs').value },
+        ampliacao: { resultado: document.getElementById('ampliacaoResultado').value, obs: document.getElementById('ampliacaoObs').value },
+        teclado: { resultado: document.getElementById('tecladoResultado').value, obs: document.getElementById('tecladoObs').value },
+        cores: { resultado: document.getElementById('coresResultado').value, obs: document.getElementById('coresObs').value },
+        responsivo: { resultado: document.getElementById('responsivoResultado').value, obs: document.getElementById('responsivoObs').value },
+        observacoesGerais: document.getElementById('observacoesGerais').value
+      };
+      telas.push(tela);
+      alert('Tela adicionada com sucesso! Você pode editar os dados diretamente no código ou adicionar novamente.');
+    }
+
+    function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text('Relatório de Teste de Acessibilidade', 20, 20);
+      let y = 30;
+      telas.forEach((tela, index) => {
+        doc.setFontSize(12);
+        doc.text(`Tela ${index + 1}: ${tela.nome}`, 20, y); y += 10;
+        doc.text(`Versão Testada: ${tela.versao}`, 20, y); y += 10;
+        doc.text(`Data do Teste: ${tela.data}`, 20, y); y += 10;
+        doc.text(`Prioridade: ${tela.prioridade}`, 20, y); y += 10;
+        doc.text(`Responsável pelo Teste: ${tela.responsavelTeste}`, 20, y); y += 10;
+        doc.text(`Responsável pela Correção: ${tela.responsavelCorrecao}`, 20, y); y += 10;
+        doc.text(`Status de Correção: ${tela.statusCorrecao}`, 20, y); y += 10;
+        doc.text(`Leitor de Tela: ${tela.leitor.resultado} - ${tela.leitor.obs}`, 20, y); y += 10;
+        doc.text(`Contraste: ${tela.contraste.resultado} - ${tela.contraste.obs}`, 20, y); y += 10;
+        doc.text(`Ampliação: ${tela.ampliacao.resultado} - ${tela.ampliacao.obs}`, 20, y); y += 10;
+        doc.text(`Navegação por Teclado: ${tela.teclado.resultado} - ${tela.teclado.obs}`, 20, y); y += 10;
+        doc.text(`Uso de Cores: ${tela.cores.resultado} - ${tela.cores.obs}`, 20, y); y += 10;
+        doc.text(`Responsividade: ${tela.responsivo.resultado} - ${tela.responsivo.obs}`, 20, y); y += 10;
+        doc.text(`Observações Gerais: ${tela.observacoesGerais}`, 20, y); y += 20;
+        if (y > 270) { doc.addPage(); y = 20; }
+      });
+      doc.save('relatorio_acessibilidade.pdf');
+    }
+
+    window.onload = () => {
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('dataTeste').value = hoje;
+    };
+  </script>
+</body>
+</html>

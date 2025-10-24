@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Acessibilidade Interativo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2 { color: #2c3e50; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input, textarea, select { width: 100%; padding: 5px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; margin-right: 10px; }
+    .categoria { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; border-radius: 5px; }
+    .info { font-size: 12px; color: #555; margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Roteiro de Teste de Acessibilidade Interativo</h1>
+
+  <h2>📋 Informações da Tela</h2>
+  <label>Nome da Tela:</label>
+  <input type="text" id="nomeTela">
+
+  <label>Data do Teste:</label>
+  <input type="date" id="dataTeste">
+  <script>document.getElementById('dataTeste').value = new Date().toISOString().split('T')[0];</script>
+
+  <label>Prioridade:</label>
+  <select id="prioridade">
+    <option>Alta</option>
+    <option>Média</option>
+    <option>Baixa</option>
+  </select>
+
+  <label>Responsável pelo Teste:</label>
+  <input type="text" id="responsavel">
+
+  <label>Status de Correção:</label>
+  <select id="statusCorrecao">
+    <option>Pendente</option>
+    <option>Em andamento</option>
+    <option>Concluído</option>
+  </select>
+
+  <div class="categoria">
+    <h3>🗣️ Leitor de Tela</h3>
+    <div class="info">Verifique se todos os elementos da interface são lidos corretamente e em ordem lógica.</div>
+    <label>Resultado:</label>
+    <select id="leitorResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="leitorObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🎨 Contraste</h3>
+    <div class="info">Verifique se o contraste entre texto e fundo atende aos padrões WCAG AA ou AAA.</div>
+    <label>Resultado:</label>
+    <select id="contrasteResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="contrasteObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🔍 Ampliação</h3>
+    <div class="info">Verifique se a interface permanece funcional e legível com zoom de até 200%.</div>
+    <label>Resultado:</label>
+    <select id="ampliacaoResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="ampliacaoObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>⌨️ Navegação por Teclado</h3>
+    <div class="info">Verifique se todos os elementos são acessíveis usando apenas o teclado.</div>
+    <label>Resultado:</label>
+    <select id="tecladoResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="tecladoObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>🌈 Uso de Cores</h3>
+    <div class="info">Verifique se a informação não depende exclusivamente da cor para ser compreendida.</div>
+    <label>Resultado:</label>
+    <select id="coresResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="coresObs"></textarea>
+  </div>
+
+  <div class="categoria">
+    <h3>📱 Responsividade</h3>
+    <div class="info">Verifique se a interface se adapta corretamente a diferentes tamanhos de tela.</div>
+    <label>Resultado:</label>
+    <select id="responsivoResultado"><option>Positivo</option><option>Negativo</option></select>
+    <label>Observações:</label>
+    <textarea id="responsivoObs"></textarea>
+  </div>
+
+  <label>Observações Gerais da Tela:</label>
+  <textarea id="observacoes"></textarea>
+
+  <button onclick="adicionarTela()">Adicionar Tela ao Relatório</button>
+  <button onclick="gerarPDF()">Gerar Relatório em PDF</button>
+
+  <script>
+    let telas = [];
+
+    function adicionarTela() {
+      const tela = {
+        nome: document.getElementById('nomeTela').value,
+        data: document.getElementById('dataTeste').value,
+        prioridade: document.getElementById('prioridade').value,
+        responsavel: document.getElementById('responsavel').value,
+        status: document.getElementById('statusCorrecao').value,
+        leitor: { resultado: document.getElementById('leitorResultado').value, obs: document.getElementById('leitorObs').value },
+        contraste: { resultado: document.getElementById('contrasteResultado').value, obs: document.getElementById('contrasteObs').value },
+        ampliacao: { resultado: document.getElementById('ampliacaoResultado').value, obs: document.getElementById('ampliacaoObs').value },
+        teclado: { resultado: document.getElementById('tecladoResultado').value, obs: document.getElementById('tecladoObs').value },
+        cores: { resultado: document.getElementById('coresResultado').value, obs: document.getElementById('coresObs').value },
+        responsivo: { resultado: document.getElementById('responsivoResultado').value, obs: document.getElementById('responsivoObs').value },
+        observacoes: document.getElementById('observacoes').value
+      };
+      telas.push(tela);
+      alert('Tela adicionada com sucesso!');
+    }
+
+    function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text('Relatório de Teste de Acessibilidade', 20, 20);
+      let y = 30;
+
+      telas.forEach((tela, i) => {
+        doc.setFontSize(12);
+        doc.text(`Tela ${i + 1}: ${tela.nome}`, 20, y); y += 8;
+        doc.text(`Data do Teste: ${tela.data}`, 20, y); y += 8;
+        doc.text(`Prioridade: ${tela.prioridade}`, 20, y); y += 8;
+        doc.text(`Responsável: ${tela.responsavel}`, 20, y); y += 8;
+        doc.text(`Status de Correção: ${tela.status}`, 20, y); y += 8;
+
+        const categorias = ['leitor', 'contraste', 'ampliacao', 'teclado', 'cores', 'responsivo'];
+        const nomes = {
+          leitor: 'Leitor de Tela',
+          contraste: 'Contraste',
+          ampliacao: 'Ampliação',
+          teclado: 'Navegação por Teclado',
+          cores: 'Uso de Cores',
+          responsivo: 'Responsividade'
+        };
+
+        categorias.forEach(cat => {
+          doc.text(`${nomes[cat]} - Resultado: ${tela[cat].resultado}`, 20, y); y += 8;
+          doc.text(`Observações: ${tela[cat].obs}`, 20, y); y += 8;
+        });
+
+        doc.text(`Observações Gerais: ${tela.observacoes}`, 20, y); y += 12;
+
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save('relatorio_acessibilidade.pdf');
+    }
+  </script>
+</body>
+</html>
